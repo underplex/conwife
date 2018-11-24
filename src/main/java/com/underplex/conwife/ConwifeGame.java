@@ -26,7 +26,17 @@ public class ConwifeGame {
 	public void printArray(){
 
 		blockAdvancer.printBlock(current);
-		
+	}
+
+	public int getTurn(){
+		return turn;
 	}
 	
+	public Block getCurrentBlock(){
+		return current;
+	}
+	
+	public Map<Integer,Block> getHistory(){
+		return history;
+	}
 }
