@@ -20,7 +20,20 @@ public class FileLoader {
 	private final int height;
 	private final String[][] array;
 		
-	public FileLoader(String fileName, Map<String,String> statusMap, int skipRows){
+	/**
+	 * Constructor that loads a file.
+	 * <p>
+	 * Generally, the file is expected to be a simple .txt file with single characters (no space separator) representing states in a cell in the row and column the character is in. Each row should have the same number of characters in it. The only exception to this is
+	 * are the rows that will be skipped. 
+	 * <p>
+	 * If a character is not in the list of keys for the <tt>statusMap</tt> parameter, the character won't be read and will be replaced by the value given in this class's <tt>DEFAULT_VALUE</tt> String.
+	 * <p>
+	 * 
+	 * @param fileName String that is full path of the file to be loaded
+	 * @param statusMap map of String values expected in the file to the values needed for the actual game simulation
+	 * @param skipRows number of rows to skip in the file
+	 */
+	public FileLoader(String fileName, Map<String,String> statusMap, int skipRows, String defaultValue){
 		List<String> lines = makeLinesList(fileName);
 		
 		skipRows = Math.min(skipRows, lines.size());
@@ -43,7 +56,7 @@ public class FileLoader {
 		}
 		
 		// now safely transfer the temp array of values to an actual array, being careful to fill in default values
-		String[][] rString = new String[lines.size()][greatestHeight];
+		String[][] rString = new String[greatestHeight][lines.size()];
 		for (int i = 0; i < lines.size(); i++){
 			List<String> line = temp.get(i);
 			
@@ -54,14 +67,18 @@ public class FileLoader {
 				}
 				// protect against null/illegal values surrounded by legal values
 				if (cell == null){
-					cell = DEFAULT_VALUE;
+					cell = defaultValue;
 				}					
-				rString[i][j] = cell;
+				rString[j][i] = cell;
 			}			
 		}
 		this.array = rString;
-		this.width = temp.size();
-		this.height = greatestHeight;
+		this.width = greatestHeight;
+		this.height = temp.size();
+	}
+	
+	public FileLoader(String fileName, Map<String,String> statusMap, int skipRows){
+		this(fileName,statusMap,skipRows,"undefined");
 	}
 		
 	private static List<String> makeLinesList(String fileName){

@@ -3,7 +3,7 @@ package com.underplex.conwife;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Demo {
+public class DemoBlinker {
 	
 	public static void main(String [] args){
 		
